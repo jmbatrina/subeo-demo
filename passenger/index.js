@@ -1,4 +1,4 @@
-var autofill = {}
+var autofill = JSON.parse(localStorage.getItem("autofill")) ?? {}
 var currentFormName = "";
 
 // START: Sample code from https://davidshimjs.github.io/qrcodejs/
@@ -188,6 +188,7 @@ function getAnswers() {
 
         // update autofill value
         autofill[ans_qidx] = ans_val;
+        localStorage.setItem("autofill", JSON.stringify(autofill));
     }
     console.log("AUTOFILL AFTER", autofill);
 
