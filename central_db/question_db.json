@@ -1,0 +1,61 @@
+// TODO: Create system for non-text form fields (Date, Signature)
+
+const LRT2_stations = '[ \
+"Antipolo", \
+"Marikina-Pasig", \
+"Santolan", \
+"Katipunan", \
+"Anonas", \
+"Araneta Center-Cubao", \
+"Betty Go-Belmonte", \
+"Gilmore", \
+"J. Ruiz", \
+"V. Mapa", \
+"Purez", \
+"Legarda", \
+"Recto" \
+]';
+// "Tutuban", \
+// "Divisoria", \
+// "Pier 4" \
+
+// From https://www.lrta.gov.ph/tickets-and-fares/
+const LRT2_SJT_fare = [
+ [0, 20, 20, 25, 25, 25, 25, 30, 30, 30, 30, 35, 35],
+ [20, 0, 15, 20, 20, 25, 25, 25, 25, 30, 30, 30, 35],
+ [20, 15, 0, 20, 20, 20, 20, 25, 25, 25, 30, 30, 30],
+ [25, 20, 20, 0, 15, 20, 20, 20, 20, 25, 25, 25, 30],
+ [25, 20, 20, 15, 0, 15, 20, 20, 20, 20, 25, 25, 25],
+ [25, 25, 20, 20, 15, 0, 15, 20, 20, 20, 20, 25, 25, ],
+ [25, 25, 20, 20, 20, 15, 0, 15, 20, 20, 20, 25, 25],
+ [30, 25, 25, 20, 20, 20, 15, 0, 15, 20, 20, 20, 25],
+ [30, 25, 25, 20, 20, 20, 20, 15, 0, 15, 20, 20, 20],
+ [30, 30, 25, 25, 20, 20, 20, 20, 15, 0, 15, 20, 20],
+ [30, 30, 30, 25, 25, 20, 20, 20, 20, 15, 0, 15, 20],
+ [35, 30, 30, 25, 25, 25, 25, 20, 20, 20, 15, 0, 15],
+ [35, 35, 30, 30, 25, 25, 25, 25, 20, 20, 20, 15, 0],
+];
+
+var qs = `[ \
+{"Name": "First Name"}, \
+{"Name": "Middle Name"}, \
+{"Name": "Surname"}, \
+{"Name": "School"}, \
+{"Name": "Senior ID #"}, \
+{"Name": "First pet\'s name"}, \
+{"Name": "Mother\'s maiden name"}, \
+{"Name": "Station of Origin", "Type": "Choice", \
+    "Choices": ${LRT2_stations}}, \
+{"Name": "Destination", "Type": "Choice", \
+    "Choices": ${LRT2_stations}}, \
+{"Name": "Date", "Type": "Date"}, \
+{"Name": "Signature", "Type": "Image"} \
+]`;
+
+
+var presets = { "Student": [1,2,3,4,8,9, 10], "Senior": [1,2,3,5,8,9, 10],
+    "Security Questions": [1,2,3,6,7, 10]
+};
+
+const formNamePrefix = "discountForm-";
+
