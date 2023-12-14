@@ -1,0 +1,16 @@
+LRT cashier side is at lrt/index.html
+Passenger side is at passenger/index.html
+
+For Android, need ng http server (e.g. https://play.google.com/store/apps/details?id=com.phlox.simpleserver) since opening an html is sandboxed on its own context without access to js scripts.
+
+#General Flow
+- LRT generates question Form QR
+- Passenger scans QR
+- Passenger fills out generated form
+- Passenger generates Answer QR
+- LRT scans Answer QR to get passenger details
+
+
+#Vendored Dependencies
+[qrcode.js](https://davidshimjs.github.io/qrcodejs/) - For generating QR Codes
+[html5-qrcode](https://www.npmjs.com/package/html5-qrcode) - QR scanner (camera and image)
