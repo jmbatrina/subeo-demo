@@ -300,7 +300,18 @@ const defaultForm = "Student";
 function loadAccountDB() {
     let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
     acoount_db["('juandelacruz','password')"] = {
-        "email": "juandelacruz@example.com"
+        "email": "juandelacruz@example.com",
+        "subeoID": "6373681652",
+        "first-name": "Juan",
+        "mid-name": "",
+        "last-name": "de la Cruz",
+        "age": "18",
+        "passenger-type": "Student",
+        "1by1ID": "",
+        "proofID": "",
+        "kycID": "",
+        "school": "Polytechnic University of The Philippines",
+        "student-num": "201920377"
     };
 
     return account_db;
