@@ -1,13 +1,12 @@
 var autofill = JSON.parse(localStorage.getItem("autofill")) ?? {}
 var currentFormName = "";
 
-// START: Sample code from https://davidshimjs.github.io/qrcodejs/
 var qrcode = new QRCode(document.getElementById("qrcode"), {
     width : 300,
     height : 300
 });
 
-function makeCode (formName, answers) {
+function makeCode (answers) {
     // var elText = document.getElementById("text");
     //
     // if (!elText.value) {
@@ -22,7 +21,7 @@ function makeCode (formName, answers) {
 
     if (out === "") out = ",";
 
-    template = `START:1.0,ANS,LRT-2,discountForm-${formName},${out}END:Subeo,1.0`
+    template = `START:1.0,ANS,Light Rail Transit Authority,discount,${out}END:Subeo,1.0.0`
 
     qrcode.makeCode(template);
 }
@@ -247,7 +246,7 @@ function createScanner() {
         "reader", { fps: 10, qrbox: 250 });
     html5QrcodeScanner.render(onScanSuccess);
 }
-createScanner();
+// createScanner();
 // END: Sample code from https://blog.minhazav.dev/research/html5-qrcode.html
 
 
@@ -269,9 +268,42 @@ function createPresetButtons(presets) {
 }
 
 function generateAnswerQR() {
-    makeCode(currentFormName, getAnswers());
+    let accountDetails = JSON.parse(sessionStorage.getItem("subeo-activeUser-details"));
+    // makeCode(currentFormName, getAnswers());
+    // TODO: Don't hardcode this conversion matrix (should probably be in question db)
+    const formName = {
+        "Student": "Student With Prevalidation",
+        "Senior Citizen": "Senior With Prevalidation",
+        "PWD": "PWD With Prevalidation"
+    }[accountDetails["passenger-type"]];
+    console.log("FORMNAME", formName, accountDetails);
+
+    const questions = loadQuestions();
+
+    let answers = []
+    for (var idx of presets[formName]) {
+        console.log(questions[idx-1]);
+        answers.push(accountDetails[questions[idx-1]["Name"]]);
+    }
+
+    console.log(answers);
+    makeCode(answers);
+    document.getElementById("passenger-id").innerText = accountDetails["subeoID"];
 }
 
-createPresetButtons(presets);
+// createPresetButtons(presets);
 const defaultForm = "Student";
-showQuestions(defaultForm, presets[defaultForm]);
+// showQuestions(defaultForm, presets[defaultForm]);
+
+
+function loadAccountDB() {
+    let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
+    acoount_db["('juandelacruz','password')"] = {
+        "email": "juandelacruz@example.com"
+    };
+
+    return account_db;
+}
+
+
+generateAnswerQR();

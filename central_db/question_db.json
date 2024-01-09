@@ -39,7 +39,7 @@ const LRT2_SJT_fare = [
 var qs = `[ \
 {"Name": "First Name"}, \
 {"Name": "Middle Name"}, \
-{"Name": "Surname"}, \
+{"Name": "Last Name"}, \
 {"Name": "School"}, \
 {"Name": "Senior ID #"}, \
 {"Name": "First pet\'s name"}, \
@@ -49,12 +49,25 @@ var qs = `[ \
 {"Name": "Destination", "Type": "Choice", \
     "Choices": ${LRT2_stations}}, \
 {"Name": "Date", "Type": "Date"}, \
-{"Name": "Signature", "Type": "Image"} \
+{"Name": "Signature", "Type": "Image"}, \
+{"Name": "Student ID #"}, \
+{"Name": "PWD ID #"}, \
+{"Name": "subeoID"}, \
+{"Name": "first-name"}, \
+{"Name": "mid-name"}, \
+{"Name": "last-name"}, \
+{"Name": "school"}, \
+{"Name": "student-num"}, \
+{"Name": "senior-id-num"}, \
+{"Name": "pwd-id-num"} \
 ]`;
 
 
 var presets = { "Student": [1,2,3,4,8,9, 10], "Senior": [1,2,3,5,8,9, 10],
-    "Security Questions": [1,2,3,6,7, 10]
+    "Security Questions": [1,2,3,6,7, 10],
+    "Student With Prevalidation": [14,15,16,17,18,19],
+    "Senior With Prevalidation": [14,15,16,17,20],
+    "PWD With Prevalidation": [14,15,16,17,20],
 };
 
 const formNamePrefix = "discountForm-";

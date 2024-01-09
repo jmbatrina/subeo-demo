@@ -10,6 +10,8 @@ function login() {
     console.log("account" + key)
     if (Object.keys(account_db).indexOf(key) != -1 || key === "('juandelacruz','password')") {
         alert(`Welcome back ${username}!`)
+        sessionStorage.setItem("subeo-activeUser", key);
+        sessionStorage.setItem("subeo-activeUser-details", JSON.stringify(account_db[key]));
         window.location.href = "qr-generate.html";
     } else {
         alert("Incorrect username/password. If you have not been validated for discount yet, please sign up first.")
