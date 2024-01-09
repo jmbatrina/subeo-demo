@@ -236,10 +236,13 @@ function onScanSuccess(decodedText, decodedResult) {
     const accountDetails = getUserDetails(subeoID);
     let detailIDs = {"age": "Age", "passenger-type": "Passenger Type", "email": "Email"};
     let imgIDs = {"1by1ID": "1x1 ID", "proofID": `${accountDetails["passenger-type"]} ID`, "kycID": `Selfie with ${accountDetails["passenger-type"]} ID`};
-    console.log("DEETS: " + JSON.stringify(accountDetails));
 
     for (let detailID of Object.keys(detailIDs)) {
         raw_anslist.push({"Label": detailIDs[detailID], "Answer": accountDetails[detailID]});
+    }
+
+    for (let imgID of Object.keys(imgIDs)) {
+        raw_anslist.push({"Type": "Image", "Label": imgIDs[imgID], "Answer": accountDetails[imgID]});
     }
 
     populateInfoDiv("ans-list", raw_anslist);
@@ -263,9 +266,15 @@ function populateInfoDiv(divID, fields) {
         const q_name = q["Label"];
         var raw_ans = q["Answer"];
 
+        var anscontent;
         switch (type) {
             case "Image":
-                // TODO: Implement
+                anscontent = document.createElement("div");
+                var img = document.createElement("img");
+                img.setAttribute("src", `data:image/png;base64,${raw_ans}`);
+                anscontent.appendChild(document.createElement("br"));
+                anscontent.appendChild(img);
+
                 break;
             case "Choice":
                 const opt_idx = parseInt(raw_ans)-1;
@@ -278,23 +287,20 @@ function populateInfoDiv(divID, fields) {
                     orig_idx = opt_idx;
                     console.log("Found orig", opt_idx, raw_ans);
                 }
-                break;
             case "Date":
             case "String":
             default:
+                anscontent = document.createElement("b");
+                anscontent.innerText = `${raw_ans}`;
                 break;
         }
-        const ans = `${raw_ans}`;
-        answer_form += `${q_name}: ${ans}\n`;
+        answer_form += `${q_name}: ${raw_ans}\n`;
 
         var qtext = document.createElement("label");
         qtext.innerText = `${q_name}: `;
 
-        var anstext = document.createElement("b");
-        anstext.innerText = `${ans}`;
-
         ansdiv.appendChild(qtext);
-        ansdiv.appendChild(anstext);
+        ansdiv.appendChild(anscontent);
         ansdiv.appendChild(document.createElement("br"));
     }
 
@@ -331,7 +337,7 @@ function createScanner() {
     // global var
     html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", { fps: 10, qrbox: 250 });
-    html5QrcodeScanner.render(onScanSuccess);
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
 }
 createScanner();
 // END: Sample code from https://blog.minhazav.dev/research/html5-qrcode.html
@@ -391,29 +397,10 @@ function removePrevAnswerForm() {
 }
 
 
-function loadAccountDB() {
-    let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
-    account_db["('juandelacruz','password')"] = {
-        "email": "juandelacruz@example.com",
-        "subeoID": "6373681652",
-        "first-name": "Juan",
-        "mid-name": "",
-        "last-name": "de la Cruz",
-        "age": "18",
-        "passenger-type": "Student",
-        "1by1ID": "",
-        "proofID": "",
-        "kycID": "",
-        "school": "Polytechnic University of The Philippines",
-        "student-num": "201920377"
-    };
-
-    return account_db;
-}
-
 function getUserDetails(subeoID) {
     let account_db = loadAccountDB();
     for (details of Object.values(account_db)) {
+        console.log("CHECK", details, details["subeoID"], subeoID, details["subeoID"] == subeoID);
         if (details["subeoID"] === subeoID) {
             return details;
         }

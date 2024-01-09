@@ -1,5 +1,3 @@
-var account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
-
 function login() {
     var username = document.getElementById("username")?.value ?? "";
     var password = document.getElementById("password")?.value ?? "";
@@ -8,6 +6,7 @@ function login() {
     // TODO: Use proper auth
     var key = `('${username}','${password}')`;
     console.log("account" + key)
+    let account_db = loadAccountDB();
     if (Object.keys(account_db).indexOf(key) != -1 || key === "('juandelacruz','password')") {
         alert(`Welcome back ${username}!`)
         sessionStorage.setItem("subeo-activeUser", key);
