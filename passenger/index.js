@@ -1,4 +1,4 @@
-var account_db = localStorage.getItem("subeo-accounts") ?? {};
+var account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
 
 function login() {
     var username = document.getElementById("username")?.value ?? "";
@@ -8,7 +8,8 @@ function login() {
     // TODO: Use proper auth
     var key = `('${username}','${password}')`;
     console.log("account" + key)
-    if ((key in account_db) || key === "('juandelacruz@example.com','password')") {
+    if (Object.keys(account_db).indexOf(key) != -1 || key === "('juandelacruz','password')") {
+        alert(`Welcome back ${username}!`)
         window.location.href = "qr-generate.html";
     } else {
         alert("Incorrect username/password. If you have not been validated for discount yet, please sign up first.")
