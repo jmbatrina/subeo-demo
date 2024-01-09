@@ -214,6 +214,13 @@ function onScanSuccess(decodedText, decodedResult) {
         raw_anslist.push({"Type": q["Type"], "Label": q["Label"], "Answer": raw_ans});
     }
 
+    // HACK: inject station fields (inputted on LRT side) to Answer QR
+    const orig_idx = document.getElementById("answer-1").value;
+    const dest_idx = document.getElementById("answer-2").value;
+    const station_choices = questions[ORIG_STATION]["Choices"];
+    raw_anslist.push({"Type": "Choice", "Label": "Station of Origin", "Answer": orig_idx, "Choices": station_choices});
+    raw_anslist.push({"Type": "Choice", "Label": "Destination", "Answer": dest_idx,"Choices": station_choices});
+
     populateInfoDiv("ans-list", raw_anslist);
 
     // document.getElementById("ans-form-name").innerText = `(${formName})`;
@@ -233,7 +240,7 @@ function populateInfoDiv(divID, fields) {
     for (var q of fields) {
         const type = q["Type"];
         const q_name = q["Label"];
-        const raw_ans = q["Answer"];
+        var raw_ans = q["Answer"];
 
         switch (type) {
             case "Image":
