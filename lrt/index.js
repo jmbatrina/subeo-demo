@@ -208,10 +208,20 @@ function onScanSuccess(decodedText, decodedResult) {
     const preset_fields = presets[formName];
 
     let raw_anslist = [];
+    var subeoID = -1;
     for (var qidx of preset_fields) {
         const q = questions[qidx-1];
         var raw_ans = answers[answer_idx++];
         raw_anslist.push({"Type": q["Type"], "Label": q["Label"], "Answer": raw_ans});
+
+        if (q["Name"] === "subeoID") {
+            subeoID = raw_ans;
+        }
+    }
+
+    if (subeoID == -1) {
+        alert("Invalid Passenger Subeo ID");
+        return;
     }
 
     // HACK: inject station fields (inputted on LRT side) to Answer QR
@@ -220,6 +230,17 @@ function onScanSuccess(decodedText, decodedResult) {
     const station_choices = questions[ORIG_STATION]["Choices"];
     raw_anslist.push({"Type": "Choice", "Label": "Station of Origin", "Answer": orig_idx, "Choices": station_choices});
     raw_anslist.push({"Type": "Choice", "Label": "Destination", "Answer": dest_idx,"Choices": station_choices});
+
+    // add information from LRT database
+    // HACK: hardcoded list of field ids; from passenger side signup.js
+    const accountDetails = getUserDetails(subeoID);
+    let detailIDs = {"age": "Age", "passenger-type": "Passenger Type", "email": "Email"};
+    let imgIDs = {"1by1ID": "1x1 ID", "proofID": `${accountDetails["passenger-type"]} ID`, "kycID": `Selfie with ${accountDetails["passenger-type"]} ID`};
+    console.log("DEETS: " + JSON.stringify(accountDetails));
+
+    for (let detailID of Object.keys(detailIDs)) {
+        raw_anslist.push({"Label": detailIDs[detailID], "Answer": accountDetails[detailID]});
+    }
 
     populateInfoDiv("ans-list", raw_anslist);
 
@@ -372,7 +393,7 @@ function removePrevAnswerForm() {
 
 function loadAccountDB() {
     let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
-    acoount_db["('juandelacruz','password')"] = {
+    account_db["('juandelacruz','password')"] = {
         "email": "juandelacruz@example.com",
         "subeoID": "6373681652",
         "first-name": "Juan",
@@ -394,7 +415,7 @@ function getUserDetails(subeoID) {
     let account_db = loadAccountDB();
     for (details of Object.values(account_db)) {
         if (details["subeoID"] === subeoID) {
-            return subeoID;
+            return details;
         }
     }
 
