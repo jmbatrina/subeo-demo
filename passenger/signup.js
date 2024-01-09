@@ -62,7 +62,7 @@ function registerCredentials() {
 function registerDetails(accountInfo) {
     let key =`('${accountInfo["username"]}','${accountInfo["password"]}')`;
 
-    let detailIDs = ["first-name", "mid-name", "last-name", "age"];
+    let detailIDs = ["first-name", "mid-name", "last-name", "age", "passenger-type"];
     let imgIDs = ["1by1ID", "proofID", "kycID"];
     let accountDetails = {}
 
@@ -76,6 +76,17 @@ function registerDetails(accountInfo) {
 
     for (let imgID of imgIDs) {
         accountDetails[imgID] = document.getElementById(imgID)?.getAttribute("imgBase64") ?? "";
+    }
+
+    let addtlFields = {
+        "Student": ["school", "student-num"],
+        "Senior Citizen": ["senior-id-num"],
+        "PWD": ["pwd-id-num"]
+    }
+
+    let passengerType = document.getElementById("passenger-type")?.value;
+    for (let fieldID of addtlFields[passengerType]) {
+        accountDetails[fieldID] = document.getElementById(fieldID)?.value ?? "";
     }
 
     // TODO: optimize by not requiring full reload/resave of DB
@@ -94,14 +105,22 @@ function registerDetails(accountInfo) {
 }
 
 function passengerTypeChanged() {
-    let passengerType = document.getElementById("passenger-type")?.value ?? 0;
-    var passengerString = [
-        "Student", "Senior Citizen", "PWD"
-    ][passengerType];
-    document.getElementById("proof-id-label").innerText = `${passengerString} ID: `;
-    document.getElementById("kyc-id-label").innerText = `Selfie with ${passengerString} ID: `;
+    let passengerType = document.getElementById("passenger-type")?.value;
+    document.getElementById("proof-id-label").innerText = `${passengerType} ID: `;
+    document.getElementById("kyc-id-label").innerText = `Selfie with ${passengerType} ID: `;
 
     document.getElementById("div-proof-id").removeAttribute("hidden");
+
+    for (let divID of ["student-fields", "senior-fields", "pwd-fields"]) {
+        document.getElementById(divID)?.setAttribute("hidden", "");
+    }
+
+    let divID = {
+        "Student": "student-fields",
+        "Senior Citizen": "senior-fields",
+        "PWD": "pwd-fields"
+    }[passengerType];
+    document.getElementById(divID)?.removeAttribute("hidden");
 }
 
 function addImagePreview(inputElemID) {

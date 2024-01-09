@@ -30,13 +30,34 @@
         <br>
         <label>Type of Passenger: </label>
         <select id="passenger-type" onchange="passengerTypeChanged()">
-          <option value=0>Student</option>
-          <option value=1>Senior Citizen</option>
-          <option value=2>PWD</option>
+          <option value="Student">Student</option>
+          <option value="Senior Citizen">Senior Citizen</option>
+          <option value="PWD">PWD</option>
         </select>
         <br>
         <br>
 
+        <div id="student-fields" hidden>
+          <label> School: </label>
+          <input type="text" id="school"/>
+          <br>
+          <br>
+          <label> Student #: </label>
+          <input type="text" id="student-num"/>
+        </div>
+
+        <div id="senior-fields" hidden>
+          <label> Senior ID #: </label>
+          <input type="text" id="senior-id-num"/>
+        </div>
+
+        <div id="pwd-fields" hidden>
+          <label> PWD ID #: </label>
+          <input type="text" id="pwd-id-num"/>
+        </div>
+
+        <br>
+        <br>
         <div id="div-proof-id" hidden>
         <label id="proof-id-label"></label>
         <input type="file" id="proofID"/>
