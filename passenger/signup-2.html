@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <script type="text/javascript" type="module" src="signup.js"></script>
+    <title>Welcome to Subeo</title>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>Subeo Registration</h2>
+
+      <div id="user-details">
+        <label>First Name: </label>
+        <input type="text" id="first-name"/>
+        <label>Middle Name: </label>
+        <input type="text" id="mid-name"/>
+        <label>Last Name: </label>
+        <input type="text" id="last-name"/>
+        <br>
+        <br>
+        <label>Age: </label>
+        <input type="number" id="age"/>
+        <br>
+        <br>
+        <label>1x1 ID: </label>
+        <input type="file" id="1by1ID"/>
+        <br>
+        <br>
+        <label>Type of Passenger: </label>
+        <select id="passenger-type" onchange="passengerTypeChanged()">
+          <option value=0>Student</option>
+          <option value=1>Senior Citizen</option>
+          <option value=2>PWD</option>
+        </select>
+        <br>
+        <br>
+
+        <div id="div-proof-id" hidden>
+        <label id="proof-id-label"></label>
+        <input type="file" id="proofID"/>
+        <br>
+        <br>
+        <label id="kyc-id-label"></label>
+        <input type="file" id="kycID"/>
+        <br>
+        <br>
+        </div>
+        <button onclick='registerDetails(JSON.parse(sessionStorage.getItem("subeo-newAccount-details")))'>Next</button>
+
+        <script>
+          for (imgInput of ["1by1ID", "proofID", "kycID"]) {
+            addImagePreview(imgInput);
+          }
+          passengerTypeChanged()
+        </script>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
