@@ -3,32 +3,28 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-    <script type="text/javascript" src="../html5-qrcode/html5-qrcode.min.js" type="module"></script>
-    <script type="text/javascript" src="../qrcodejs/jquery.min.js" type="module"></script>
-    <script type="text/javascript" src="../qrcodejs/qrcode.js" type="module"></script>
-
-    <script type="text/javascript" src="../central_db/question_db.json" type="module"></script>
     <script type="text/javascript" type="module" src="index.js" defer></script>
-    <title></title>
+    <title>Welcome to Subeo</title>
   </head>
   <body>
     <header></header>
     <main>
-      <h2>Scan Station QR for updated Form</h2>
-      <div style="width: 500px" id="reader"></div>
-      <div id="presets">Form Presets: </div>
+      <h2>Welcome to Subeo!</h2>
+      <p>Sign in to experience quick and easy LRT discounts</p>
 
-      <h2>Answer the Discount Form</h2>
-      <b id="form-name"></b>
-      <div id="questions">
+      <div id="login-details">
+        <label>Username: </label>
+        <input type="text" id="username"/>
+        <br>
+        <br>
+        <label>Password: </label>
+        <input type="password" id="password"/>
+        <br>
+        <br>
+        <button onclick="login()">Log in</button>
       </div>
 
-      <br>
-      <input type="button" onClick="generateAnswerQR()" value="Generate answer QR"/>
-
-      <h2> Show QR to LRT staff for scanning
-      <div id="qrcode" style="width:300px; height:300px; margin-top:15px;"></div>
-
+      <p>New to Subeo? <a href="orig.html">Tap here to sign up for discounts</a></p>
     </main>
     <footer></footer>
   </body>
