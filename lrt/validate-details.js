@@ -2,7 +2,6 @@ let unvalidatedDB = JSON.parse(localStorage.getItem("subeo-unvalidated")) ?? {};
 unvalidatedDB["11111111"] = Object.assign({"username":"juandelacruz","password":"password"}, hardcoded_jdlc);
 localStorage.setItem("subeo-unvalidated", JSON.stringify(unvalidatedDB));
 
-sessionStorage.setItem("subeo-currentValidationID", "11111111");
 const transactionID = sessionStorage.getItem("subeo-currentValidationID");
 
 function populateInfoDiv(divID, fields) {
