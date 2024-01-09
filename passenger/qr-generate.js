@@ -6,7 +6,7 @@ var qrcode = new QRCode(document.getElementById("qrcode"), {
     height : 300
 });
 
-function makeCode (answers) {
+function makeCode (passengerType, answers) {
     // var elText = document.getElementById("text");
     //
     // if (!elText.value) {
@@ -21,7 +21,7 @@ function makeCode (answers) {
 
     if (out === "") out = ",";
 
-    template = `START:1.0,ANS,Light Rail Transit Authority,discount,${out}END:Subeo,1.0.0`
+    template = `START:1.0,ANS,LRTA,discount-${passengerType},${out}END:Subeo,1.0.0`
 
     qrcode.makeCode(template);
 }
@@ -271,11 +271,12 @@ function generateAnswerQR() {
     let accountDetails = JSON.parse(sessionStorage.getItem("subeo-activeUser-details"));
     // makeCode(currentFormName, getAnswers());
     // TODO: Don't hardcode this conversion matrix (should probably be in question db)
+    const passengerType = accountDetails["passenger-type"];
     const formName = {
         "Student": "Student With Prevalidation",
         "Senior Citizen": "Senior With Prevalidation",
         "PWD": "PWD With Prevalidation"
-    }[accountDetails["passenger-type"]];
+    }[passengerType];
     console.log("FORMNAME", formName, accountDetails);
 
     const questions = loadQuestions();
@@ -287,7 +288,7 @@ function generateAnswerQR() {
     }
 
     console.log(answers);
-    makeCode(answers);
+    makeCode(passengerType, answers);
     document.getElementById("passenger-id").innerText = accountDetails["subeoID"];
 }
 

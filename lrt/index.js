@@ -77,34 +77,6 @@ function getActiveQuestions() {
     return out;
 }
 
-// START: Sample code from https://davidshimjs.github.io/qrcodejs/
-var qrcode = new QRCode(document.getElementById("qrcode"), {
-    width : 200,
-    height : 200
-});
-
-function makeCode (formName, indices) {
-    // var elText = document.getElementById("text");
-    //
-    // if (!elText.value) {
-    //     alert("Input a text");
-    //     elText.focus();
-    //     return;
-    // }
-    out = "";
-    for (idx of indices) {
-        out += `Q${idx},`;
-    }
-
-    if (out === "") out = ",";
-
-    template = `START:1.0,FORM,LRT-2,discountForm-${formName},${out}END:Subeo,1.0`
-
-    qrcode.makeCode(template);
-}
-// END: Sample code from https://davidshimjs.github.io/qrcodejs/
-
-
 // START: Sample code from https://blog.minhazav.dev/research/html5-qrcode.html
 function onScanSuccess(decodedText, decodedResult) {
     // Handle on success condition with the decoded text or result.
@@ -113,8 +85,16 @@ function onScanSuccess(decodedText, decodedResult) {
     var decodedFields = decodedText.split(",");
     console.log(decodedFields);
     var formName = decodedFields[3];
+
     if (formName.startsWith(formNamePrefix)) {
         formName = formName.substring(formNamePrefix.length);
+        // TODO: move conversion to validated forms outside of this func
+        formName = {
+            "Student": "Student With Prevalidation",
+            "Senior Citizen": "Senior With Prevalidation",
+            "PWD": "PWD With Prevalidation"
+        }[formName] ?? formName;
+
         if (presets[formName] === undefined) {
             console.warn(`Unknown form ${formName}`)
         }
@@ -286,9 +266,9 @@ function removePrevAnswerForm() {
     document.getElementById("answer-block").setAttribute("hidden", "");
 }
 
-showQuestionChecklist();
-createPresetButtons(presets);
+// showQuestionChecklist();
+// createPresetButtons(presets);
 
-const defaultForm = "Student";
-recheckQuestionPreset(presets, defaultForm);
-generateForm(defaultForm);
+// const defaultForm = "Student";
+// recheckQuestionPreset(presets, defaultForm);
+// generateForm(defaultForm);

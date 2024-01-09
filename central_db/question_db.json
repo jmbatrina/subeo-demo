@@ -70,5 +70,5 @@ var presets = { "Student": [1,2,3,4,8,9, 10], "Senior": [1,2,3,5,8,9, 10],
     "PWD With Prevalidation": [14,15,16,17,20],
 };
 
-const formNamePrefix = "discountForm-";
+const formNamePrefix = "discount-";
 
