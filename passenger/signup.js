@@ -43,10 +43,15 @@ function registerCredentials() {
         return;
     }
 
+    // TODO: make sure subeoID numbers are unique
+    const maxNum = 9999999999;
+    let subeoID = getRandomIntInclusive(0, maxNum).toString().padStart(maxNum.toString().length, "0")
+
     let accountInfo = {
         "username": username,
         "password": password,
-        "email": email
+        "email": email,
+        "subeoID": subeoID
     }
 
     sessionStorage.setItem("subeo-newAccount-details", JSON.stringify(accountInfo));
@@ -60,7 +65,10 @@ function registerDetails(accountInfo) {
     let detailIDs = ["first-name", "mid-name", "last-name", "age"];
     let imgIDs = ["1by1ID", "proofID", "kycID"];
     let accountDetails = {}
-    accountDetails["email"] = accountInfo["email"];
+
+    for (let infoKey of ["email", "subeoID"]) {
+        accountDetails[infoKey] = accountInfo[infoKey];
+    }
 
     for (let detailID of detailIDs) {
         accountDetails[detailID] = document.getElementById(detailID)?.value ?? "";

@@ -47,13 +47,21 @@
         <br>
         <br>
         </div>
+        <br>
+        <br>
+        <label>Passenger Subeo ID: </label>
+        <b id="passenger-id"></b>
+        <br>
+        <br>
+
         <button onclick='registerDetails(JSON.parse(sessionStorage.getItem("subeo-newAccount-details")))'>Next</button>
 
         <script>
           for (imgInput of ["1by1ID", "proofID", "kycID"]) {
             addImagePreview(imgInput);
           }
-          passengerTypeChanged()
+          document.getElementById("passenger-id").innerText = JSON.parse(sessionStorage.getItem("subeo-newAccount-details"))["subeoID"];
+          passengerTypeChanged();
         </script>
       </div>
     </main>
