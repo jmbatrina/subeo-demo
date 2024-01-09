@@ -1,8 +1,8 @@
 function loadAccountDB() {
-    let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ??
-        {"('juandelacruz','password')": {
-            "email": "juandelacruz@example.com"
-        }};
+    let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
+        // {"('juandelacruz','password')": {
+        //     "email": "juandelacruz@example.com"
+        // }};
 
     return account_db;
 }
@@ -66,7 +66,7 @@ function registerDetails(accountInfo) {
     let imgIDs = ["1by1ID", "proofID", "kycID"];
     let accountDetails = {}
 
-    for (let infoKey of ["email", "subeoID"]) {
+    for (let infoKey of ["email", "subeoID", "username", "password"]) {
         accountDetails[infoKey] = accountInfo[infoKey];
     }
 
@@ -98,6 +98,10 @@ function registerDetails(accountInfo) {
     // TODO: make sure transaction numbers are unique
     const maxNum = 99999999;
     let transactionNumber = getRandomIntInclusive(0, maxNum).toString().padStart(maxNum.toString().length, "0")
+
+    let unvalidated = JSON.parse(localStorage.getItem("subeo-unvalidated")) ?? {};
+    unvalidated[transactionNumber] = accountDetails;
+    localStorage.setItem("subeo-unvalidated", JSON.stringify(unvalidated));
     alert(`Your details have been submitted. Your transaction number is ${transactionNumber}. Kindly await confirmation email for your account)`);
 
     sessionStorage.setItem("subeo-newAccount-details", "");

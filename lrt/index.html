@@ -1,34 +1,11 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-    <script type="text/javascript" src="../html5-qrcode/html5-qrcode.min.js" type="module"></script>
-    <script type="text/javascript" src="../qrcodejs/jquery.min.js" type="module"></script>
-    <script type="text/javascript" src="../qrcodejs/qrcode.js" type="module"></script>
-
-    <script type="text/javascript" src="../central_db/question_db.json" type="module"></script>
-    <script type="text/javascript" type="module" src="index.js" defer></script>
-    <title></title>
   </head>
   <body>
-    <header></header>
-    <main>
-      <div id="reader-block">
-      <h2>Scan Passenger's Answer QR</h2>
-      <div style="width: 500px" id="reader"></div>
-      </div>
-
-      <div id="questions"></div>
-      <div id="answer-block" hidden>
-<!--         <h3>Information from scanned Answer Form:</h3> -->
-        <div id="ans-list"></div>
-
-        <br>
-        <button id="reject-discount" onclick="alert('Please tell the passenger to register/prevalidate first, or use the paper-based discount form.'); removePrevAnswerForm()">Reject Discount</discount>
-        <button id="approve-discount" onclick="removePrevAnswerForm()">Approve Discount</discount>
-      </div>
-    </main>
-    <footer></footer>
+    <a href="validate.html">Validation of Discount Application</a>
+    <br>
+    <br>
+    <a href="qr-scan.html">Point of Sale (Scan Passenger QR)</a>
   </body>
 </html>
