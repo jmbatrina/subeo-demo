@@ -200,21 +200,40 @@ function onScanSuccess(decodedText, decodedResult) {
     answers = decodedFields.slice(0, end_idx);
 
     // document.getElementById("ans-form-name").innerText = `(${formName})`;
-    clearAnswerList();
 
     answer_form = ""
     answer_idx = 0;
     const questions = loadQuestions();
 
-    var ansdiv = document.getElementById("ans-list");
     const preset_fields = presets[formName];
-    var orig_idx = -1;
-    var dest_idx = -1;
+
+    let raw_anslist = [];
     for (var qidx of preset_fields) {
         const q = questions[qidx-1];
+        var raw_ans = answers[answer_idx++];
+        raw_anslist.push({"Type": q["Type"], "Label": q["Label"], "Answer": raw_ans});
+    }
+
+    populateInfoDiv("ans-list", raw_anslist);
+
+    // document.getElementById("ans-form-name").innerText = `(${formName})`;
+    document.getElementById("answer-block").removeAttribute("hidden");
+    // alert(`Got Discount application form:\n${answer_form}`);
+
+    html5QrcodeScanner.clear();
+    setTimeout(createScanner, 0);
+}
+
+function populateInfoDiv(divID, fields) {
+    var ansdiv = document.getElementById(divID);
+    clearAnswerList();
+
+    var orig_idx = -1;
+    var dest_idx = -1;
+    for (var q of fields) {
         const type = q["Type"];
         const q_name = q["Label"];
-        var raw_ans = answers[answer_idx++];
+        const raw_ans = q["Answer"];
 
         switch (type) {
             case "Image":
@@ -272,12 +291,6 @@ function onScanSuccess(decodedText, decodedResult) {
         answer_form += `${name}: ${val}\n`;
     }
 
-    // document.getElementById("ans-form-name").innerText = `(${formName})`;
-    document.getElementById("answer-block").removeAttribute("hidden");
-    alert(`Got Discount application form:\n${answer_form}`);
-
-    html5QrcodeScanner.clear();
-    setTimeout(createScanner, 0);
 }
 
 function onScanError(errorMessage) {
