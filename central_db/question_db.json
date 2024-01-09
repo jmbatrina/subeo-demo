@@ -52,14 +52,14 @@ var qs = `[ \
 {"Name": "Signature", "Type": "Image"}, \
 {"Name": "Student ID #"}, \
 {"Name": "PWD ID #"}, \
-{"Name": "subeoID"}, \
-{"Name": "first-name"}, \
-{"Name": "mid-name"}, \
-{"Name": "last-name"}, \
-{"Name": "school"}, \
-{"Name": "student-num"}, \
-{"Name": "senior-id-num"}, \
-{"Name": "pwd-id-num"} \
+{"Name": "subeoID", "Label": "Passenger Subeo ID"}, \
+{"Name": "first-name", "Label": "First Name"}, \
+{"Name": "mid-name", "Label": "Middle Name"}, \
+{"Name": "last-name", "Label": "Last Name"}, \
+{"Name": "school", "Label": "School"}, \
+{"Name": "student-num", "Label": "Student #"}, \
+{"Name": "senior-id-num", "Label": "Senior ID #"}, \
+{"Name": "pwd-id-num", "Label": "PWD ID #"} \
 ]`;
 
 

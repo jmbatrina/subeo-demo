@@ -1,9 +1,40 @@
 
-num_qs = 0;
-function addQuestionField(q) {
-    var q_name = q["Name"];
-    var q_type = q["Type"] ?? "String";
+// num_qs = 0;
+// function addQuestionField(q) {
+//     var q_name = q["Name"];
+//     var q_type = q["Type"] ?? "String";
+//
+//     qdiv = document.getElementById("questions");
+//     ++num_qs;
+//
+//     div = document.createElement("div");
+//     div.setAttribute("id", `q-${num_qs}`);
+//     qdiv.appendChild(div)
+//
+//     chk = document.createElement("input")
+//     chk.setAttribute("id", `chk-${num_qs}`);
+//     chk.setAttribute("type", "checkbox");
+//     chk.setAttribute("disabled", "");
+//
+//     text = document.createElement("input")
+//     text.setAttribute("id", `text-${num_qs}`);
+//     text.setAttribute("type", "text");
+//     // text.setAttribute("disabled", "");
+//     text.setAttribute("value", q_name);
+//
+//     div.appendChild(chk);
+//     div.appendChild(text);
+//
+//     if (q_type !== "String") {
+//         type = document.createElement("b")
+//         type.innerHTML = `(${q_type})`;
+//         div.appendChild(type);
+//     }
+// }
 
+// from passenger side qr-generate.js
+num_qs = 0;
+function addQuestionField(qidx, q) {
     qdiv = document.getElementById("questions");
     ++num_qs;
 
@@ -11,24 +42,76 @@ function addQuestionField(q) {
     div.setAttribute("id", `q-${num_qs}`);
     qdiv.appendChild(div)
 
-    chk = document.createElement("input")
-    chk.setAttribute("id", `chk-${num_qs}`);
-    chk.setAttribute("type", "checkbox");
-    chk.setAttribute("disabled", "");
+    question = document.createElement("b")
+    question.setAttribute("id", `question-${num_qs}`);
+    question.innerText = q["Name"];
 
-    text = document.createElement("input")
-    text.setAttribute("id", `text-${num_qs}`);
-    text.setAttribute("type", "text");
-    // text.setAttribute("disabled", "");
-    text.setAttribute("value", q_name);
+    const type = q["Type"];
+    var answer;
+    switch (type) {
+        case "Choice":
+            answer = document.createElement("select");
+            break;
+        default:
+            answer = document.createElement("input");
+    }
 
-    div.appendChild(chk);
-    div.appendChild(text);
+    answer.setAttribute("id", `answer-${num_qs}`);
+    answer.setAttribute("data-qidx", qidx);
+    answer.setAttribute("data-type", type);
 
-    if (q_type !== "String") {
-        type = document.createElement("b")
-        type.innerHTML = `(${q_type})`;
-        div.appendChild(type);
+    switch (type) {
+        case "Date":
+            answer.setAttribute("type", "date");
+            answer.setAttribute("width", "200");
+            answer.setAttribute("height", "100");
+
+            // answer.setAttribute("value", autofill);
+            // TODO: Remove hardcoded autofill to Today's date'
+            answer.setAttribute("value", new Date().toISOString().split("T", 1)[0]);
+
+            break;
+        case "Image":
+            answer.setAttribute("type", "image");
+            break;
+        case "Choice":
+            var opt_idx = 1;
+            for (var choice of q["Choices"]) {
+                var opt = document.createElement("option"); opt.value = opt_idx++;
+                opt.innerHTML = choice;
+
+                answer.appendChild(opt);
+            }
+            break;
+        case "String":
+        default:
+            answer.setAttribute("type", "text");
+            break;
+    }
+
+    div.appendChild(question);
+    div.appendChild(document.createElement("br"));
+    div.appendChild(answer);
+    div.appendChild(document.createElement("br"));
+}
+
+function clearQuestionFields() {
+    qdiv = document.getElementById("questions");
+    while (qdiv.hasChildNodes()) {
+        qdiv.removeChild(qdiv.lastChild);
+    }
+    num_qs = 0;
+}
+
+function showQuestions(indices) {
+    clearQuestionFields();
+
+    // TODO: ALL questions loaded to preserve index (needed for autofill), but this is inefficient
+    const questions = loadQuestions();
+
+    for (var idx of indices) {
+        console.log(idx, questions[idx-1]);
+        addQuestionField(idx, questions[idx-1]);
     }
 }
 
@@ -116,7 +199,7 @@ function onScanSuccess(decodedText, decodedResult) {
     // remove all fields after END:
     answers = decodedFields.slice(0, end_idx);
 
-    document.getElementById("ans-form-name").innerText = `(${formName})`;
+    // document.getElementById("ans-form-name").innerText = `(${formName})`;
     clearAnswerList();
 
     answer_form = ""
@@ -130,7 +213,7 @@ function onScanSuccess(decodedText, decodedResult) {
     for (var qidx of preset_fields) {
         const q = questions[qidx-1];
         const type = q["Type"];
-        const q_name = q["Name"];
+        const q_name = q["Label"];
         var raw_ans = answers[answer_idx++];
 
         switch (type) {
@@ -157,8 +240,8 @@ function onScanSuccess(decodedText, decodedResult) {
         const ans = `${raw_ans}`;
         answer_form += `${q_name}: ${ans}\n`;
 
-        var qtext = document.createElement("p");
-        qtext.innerText = `${q_name}:`;
+        var qtext = document.createElement("label");
+        qtext.innerText = `${q_name}: `;
 
         var anstext = document.createElement("b");
         anstext.innerText = `${ans}`;
@@ -189,7 +272,7 @@ function onScanSuccess(decodedText, decodedResult) {
         answer_form += `${name}: ${val}\n`;
     }
 
-    document.getElementById("ans-form-name").innerText = `(${formName})`;
+    // document.getElementById("ans-form-name").innerText = `(${formName})`;
     document.getElementById("answer-block").removeAttribute("hidden");
     alert(`Got Discount application form:\n${answer_form}`);
 
@@ -266,9 +349,44 @@ function removePrevAnswerForm() {
     document.getElementById("answer-block").setAttribute("hidden", "");
 }
 
+
+function loadAccountDB() {
+    let account_db = JSON.parse(localStorage.getItem("subeo-accounts")) ?? {};
+    acoount_db["('juandelacruz','password')"] = {
+        "email": "juandelacruz@example.com",
+        "subeoID": "6373681652",
+        "first-name": "Juan",
+        "mid-name": "",
+        "last-name": "de la Cruz",
+        "age": "18",
+        "passenger-type": "Student",
+        "1by1ID": "",
+        "proofID": "",
+        "kycID": "",
+        "school": "Polytechnic University of The Philippines",
+        "student-num": "201920377"
+    };
+
+    return account_db;
+}
+
+function getUserDetails(subeoID) {
+    let account_db = loadAccountDB();
+    for (details of Object.values(account_db)) {
+        if (details["subeoID"] === subeoID) {
+            return subeoID;
+        }
+    }
+
+    return null;
+}
+
 // showQuestionChecklist();
 // createPresetButtons(presets);
 
 // const defaultForm = "Student";
 // recheckQuestionPreset(presets, defaultForm);
 // generateForm(defaultForm);
+const ORIG_STATION = 8;
+const DEST_STATION = 9;
+showQuestions([ORIG_STATION, DEST_STATION]);

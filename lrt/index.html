@@ -19,12 +19,13 @@
       <div style="width: 500px" id="reader"></div>
       </div>
 
+      <div id="questions"></div>
       <div id="answer-block" hidden>
-        <h3>Got the following Answer Form:</h3>
-        <b id="ans-form-name"></b>
+        <h3>Information from scanned Answer Form:</h3>
         <div id="ans-list"></div>
 
         <br>
+        <button id="reject-discount" onclick="alert('Please tell the passenger to register/prevalidate first, or use the paper-based discount form.'); removePrevAnswerForm()">Reject Discount</discount>
         <button id="approve-discount" onclick="removePrevAnswerForm()">Approve Discount</discount>
       </div>
     </main>
