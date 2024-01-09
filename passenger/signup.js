@@ -34,6 +34,7 @@ function registerCredentials() {
     let [usernames, emails] = getUsernamesAndEmails(loadAccountDB());
     if (usernames.indexOf(username) != -1) {
         alert(`Account with username ${username} already exists. Please choose another username`);
+        return;
     } else if (emails.indexOf(email) != -1) {
         alert(`An account has already been linked with the email ${email}. If you forgot your password, please contact Subeo support to retrieve your account`);
         return;
@@ -76,8 +77,11 @@ function registerDetails(accountInfo) {
     localStorage.setItem("subeo-accounts", JSON.stringify(account_db));
 
     // TODO: make sure transaction numbers are unique
-    let transactionNumber = getRandomIntInclusive(0, "99999999");
+    const maxNum = 99999999;
+    let transactionNumber = getRandomIntInclusive(0, maxNum).toString().padStart(maxNum.toString().length, "0")
     alert(`Your details have been submitted. Your transaction number is ${transactionNumber}. Kindly await confirmation email for your account)`);
+
+    sessionStorage.setItem("subeo-newAccount-details", "");
     window.location.href = "index.html";
 }
 
